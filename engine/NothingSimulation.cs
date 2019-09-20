@@ -1,18 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace physics
+namespace physics.engine
 {
     public class NothingSimulation : ISimulation
     {
-        private IDictionary<int, Particle> Particles { get; } = new Dictionary<int, Particle>();
+        protected IDictionary<int, Particle> Particles { get; } = new Dictionary<int, Particle>();
         
         public void AddParticle(int id, Particle particleInfo)
         {
             Particles[id] = particleInfo;
         }
 
-        public void Tick(double time)
+        public virtual void Tick(double time)
         {
             // Nothing
         }

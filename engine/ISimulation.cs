@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NumSharp;
 
-namespace physics
+namespace physics.engine
 {
     public class Particle
     {
-        NDArray Position { get; set; }
-        NDArray Velocity { get; set; }
+        public NDArray Position { get; set; }
+        public NDArray Velocity { get; set; }
     }
     
     public interface ISimulation
@@ -20,9 +19,9 @@ namespace physics
 
     public static class Simulation
     {
-        static ISimulation Get()
+        public static ISimulation Get()
         {
-            return new NothingSimulation();
+            return new InertiaSimulation();
         }
     }
 }
