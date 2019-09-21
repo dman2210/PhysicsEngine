@@ -60,7 +60,7 @@ namespace PhysicsEngine.drawing
                 cr.Arc(particle.Position[0], particle.Position[1], 2, 0, 2 * Math.PI);
                 cr.Fill();
             }
-            
+            cr.Stroke();
             cr.Restore();
 //            base.OnDrawn(cr);
             return true;

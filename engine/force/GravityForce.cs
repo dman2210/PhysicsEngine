@@ -4,7 +4,7 @@ namespace PhysicsEngine.engine.force
 {
     public class GravityForce: IForce
     {
-        public GravityForce(double g = -9.8)
+        public GravityForce(double g = -100)
         {
             G = g;
         }
@@ -17,8 +17,10 @@ namespace PhysicsEngine.engine.force
 
         public NDArray CalculateForce(NDArray positions, NDArray forceParams)
         {
-            var force = np.full_like(positions, G);
-            force[Slice.All, 0] = 0;
+            var squared = positions * positions;
+            var ds = np.sqrt(squared[Slice.All, 0] + squared[Slice.All, 1]);
+            var normed = positions / ds.reshape(-1, 1);
+            var force = G * normed;
             return force;
         }
     }

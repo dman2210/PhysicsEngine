@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="CairoSharp" Version="3.22.25.24" />
     <PackageReference Include="GtkSharp" Version="3.22.25.24" />
+    <PackageReference Include="MathNet.Numerics" Version="4.8.1" />
     <PackageReference Include="NumSharp" Version="0.20.2" />
     <PackageReference Include="SkiaSharp" Version="1.68.0" />
     <PackageReference Include="SkiaSharp.Linux" Version="1.59.3" />

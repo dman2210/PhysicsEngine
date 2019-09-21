@@ -30,12 +30,12 @@ namespace physics.engine
 
         public static ForceSimulation GetForceSimulation()
         {
-            return new ForceSimulation(new ElectricForce());
+            return new ForceSimulation(new ElectricForce(), new GravityForce());
         }
 
         public static ForceSimulation GetConstrainedSimulation()
         {
-            return new ForceConstraintsSimulation(new List<IForce>{new ElectricForce()}, ImmutableList<IConstraint>.Empty);
+            return new ForceConstraintsSimulation(new List<IForce>{new GravityForce()}, new List<IConstraint> { new EdgeConstraint(0, 1), new CoordConstraint(0), new CoordConstraint(1)});
         }
     }
 }
