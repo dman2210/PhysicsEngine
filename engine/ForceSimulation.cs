@@ -20,7 +20,7 @@ namespace PhysicsEngine.engine
     public class ForceSimulation: ISimulation
     {
         private IList<IForce> Forces { get; }
-        private Dictionary<int, int> ParticleIdToDataIndex { get; }
+        private Dictionary<int, int> ParticleIdToDataIndex { get; } = new Dictionary<int, int>();
 
         private int TotalForceParams { get; }
 
@@ -28,30 +28,32 @@ namespace PhysicsEngine.engine
         /// An n*m matrix of data for our points.
         /// n is the number of points.
         /// </summary>
-        private NDArray Data { get; }
+        private NDArray Data { get; set; }
 
-        ForceSimulation(IList<IForce> forces)
+        public ForceSimulation(params IForce[] forces)
         {
             Forces = forces;
             var numPositionParams = 2;
             var numVelocityParams = 2;
             var numMassParams = 1;
-            var numForceParams = forces.Sum(f => f.NumForceParams());
-            TotalForceParams = numPositionParams + numVelocityParams + numMassParams + numForceParams;
+            TotalForceParams = forces.Sum(f => f.NumForceParams());
+            var totalParams = numPositionParams + numVelocityParams + numMassParams + TotalForceParams;
 
             var i = 0;
-            PositionSlice = new Slice(i, numPositionParams);
+            PositionSlice = new Slice(i, i + numPositionParams);
             i += numPositionParams;
-            VelocitySlice = new Slice(i, numVelocityParams);
+            VelocitySlice = new Slice(i, i + numVelocityParams);
             i += numVelocityParams;
-            MassSlice = new Slice(i, numMassParams);
+            MassSlice = new Slice(i, i + numMassParams);
             i += numMassParams;
             ForceSlices = new List<Slice>();
             foreach (var force in forces)
             {
-                ForceSlices.Add(new Slice(i, force.NumForceParams()));
+                ForceSlices.Add(new Slice(i, i + force.NumForceParams()));
                 i += force.NumForceParams();
             }
+
+            Data = np.empty(new Shape(0, totalParams));
         }
 
         private NDArray CalculateForce(NDArray data)
@@ -83,6 +85,7 @@ namespace PhysicsEngine.engine
         public void Tick(double time)
         {
             // Use runge kutta later
+            if (Data.shape[0] <= 0) return;
             var force = CalculateForce(Data);
             Data[Slice.All, PositionSlice] += Data[Slice.All, VelocitySlice] * time + .5 * force * time * time;
         }
@@ -99,7 +102,13 @@ namespace PhysicsEngine.engine
             {
                 throw new ArgumentException("Wrong number of parameters for forces");
             }
-//            List
+            var row = new List<double>
+            {
+                x, y, vx, vy, mass
+            };
+            row.AddRange(forceParams);
+            Data = Data.vstack(np.array(new[] {row.ToArray()}));
+            ParticleIdToDataIndex[id] = Data.shape[0] - 1;
         }
 
         public Particle GetParticle(int id)

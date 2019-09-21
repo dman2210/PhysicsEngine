@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NumSharp;
+using PhysicsEngine.engine;
 
 namespace physics.engine
 {
@@ -22,6 +23,11 @@ namespace physics.engine
         public static InertiaSimulation Get()
         {
             return new InertiaSimulation();
+        }
+
+        public static ForceSimulation GetForceSimulation()
+        {
+            return new ForceSimulation();
         }
     }
 }
