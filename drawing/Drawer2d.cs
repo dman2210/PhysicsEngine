@@ -22,7 +22,23 @@ namespace PhysicsEngine.drawing
                 QueueDraw();
                 return true;
             });
+            Button btnQuit = new Button("Exit");
+            btnQuit.Clicked += OnExitClick;
+            KeyPressEvent += OnKeyPressed;
             DeleteEvent += delegate { Application.Quit(); };
+        }
+        
+        void OnExitClick(object sender, EventArgs args)
+        {
+            Application.Quit();
+        }
+
+        void OnKeyPressed(object sender, KeyPressEventArgs args)
+        {
+            if (args.Event.Key == Gdk.Key.Escape)
+            {
+                Application.Quit();
+            } 
         }
 
         protected override bool OnDrawn(Context cr)
