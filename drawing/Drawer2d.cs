@@ -8,7 +8,7 @@ namespace PhysicsEngine.drawing
     public class Drawer2d : Window
     {
         private ISimulation Simulation { get; }
-        private const int MsPerTick = 100;
+        private const int MsPerTick = 50;
         private const double TimePerTick = MsPerTick / 1000.0;
 
         public Drawer2d(ISimulation simulation) : base("Physics Engine")
@@ -16,7 +16,7 @@ namespace PhysicsEngine.drawing
             Simulation = simulation;
             Maximize();
             ShowAll();
-            GLib.Timeout.Add(100, () =>
+            GLib.Timeout.Add(MsPerTick, () =>
             {
                 Simulation.Tick(TimePerTick);
                 QueueDraw();
@@ -26,6 +26,9 @@ namespace PhysicsEngine.drawing
             btnQuit.Clicked += OnExitClick;
             KeyPressEvent += OnKeyPressed;
             DeleteEvent += delegate { Application.Quit(); };
+            btnQuit.Show();
+            Add(btnQuit);
+            ShowAll();
         }
         
         void OnExitClick(object sender, EventArgs args)
@@ -45,6 +48,7 @@ namespace PhysicsEngine.drawing
         {
             cr.Save();
             cr.Translate(AllocatedWidth/2.0, AllocatedHeight/2.0);
+            cr.Transform(new Matrix(1, 0, 0, -1, 0, 0));
             cr.LineWidth = 2;
             cr.SetSourceColor(new Color(1, 0, 0));
 
@@ -58,6 +62,7 @@ namespace PhysicsEngine.drawing
             }
             
             cr.Restore();
+//            base.OnDrawn(cr);
             return true;
         }
     }

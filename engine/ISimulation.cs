@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using NumSharp;
 using PhysicsEngine.engine;
+using PhysicsEngine.engine.constraint;
+using PhysicsEngine.engine.force;
 
 namespace physics.engine
 {
@@ -27,7 +30,12 @@ namespace physics.engine
 
         public static ForceSimulation GetForceSimulation()
         {
-            return new ForceSimulation();
+            return new ForceSimulation(new ElectricForce());
+        }
+
+        public static ForceSimulation GetConstrainedSimulation()
+        {
+            return new ForceConstraintsSimulation(new List<IForce>{new ElectricForce()}, ImmutableList<IConstraint>.Empty);
         }
     }
 }
