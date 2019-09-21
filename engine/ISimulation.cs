@@ -11,7 +11,7 @@ namespace physics.engine
     
     public interface ISimulation
     {
-        void AddParticle(int id, Particle particleInfo);
+//        void AddParticle(int id, Particle particleInfo);
         void Tick(double time);
         IList<int> ParticleIds();
         Particle GetParticle(int id);
@@ -19,7 +19,7 @@ namespace physics.engine
 
     public static class Simulation
     {
-        public static ISimulation Get()
+        public static InertiaSimulation Get()
         {
             return new InertiaSimulation();
         }
